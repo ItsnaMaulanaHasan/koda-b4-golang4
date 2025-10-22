@@ -1,5 +1,7 @@
 package user
 
+import "fmt"
+
 type User struct {
 	FirstName string
 	LastName  string
@@ -7,4 +9,10 @@ type User struct {
 	Password  string
 }
 
+func (fn User) GetFullName() string {
+	return fmt.Sprintf("%v %v", fn.FirstName, fn.LastName)
+}
+
 var Users []User
+
+var UserLogin User
