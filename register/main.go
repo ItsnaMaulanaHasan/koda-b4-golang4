@@ -46,11 +46,12 @@ func Register() {
 			scanner.Scan()
 			continue
 		}
+		dataRegister.Password = password
 
 		fmt.Println("Is the data correct?")
-		fmt.Printf("First Name: %v", dataRegister.FirstName)
-		fmt.Printf("Last Name: %v", dataRegister.LastName)
-		fmt.Printf("Email: %v", dataRegister.Email)
+		fmt.Printf("First Name: %v\n", dataRegister.FirstName)
+		fmt.Printf("Last Name: %v\n", dataRegister.LastName)
+		fmt.Printf("Email: %v\n", dataRegister.Email)
 		fmt.Print("Continue (y/n): ")
 		inputConfirm, _ := reader.ReadString('\n')
 		confirm := strings.TrimSpace(inputConfirm)
