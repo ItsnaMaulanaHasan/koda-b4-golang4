@@ -3,6 +3,8 @@ package register
 import (
 	"auth-flow/user"
 	"bufio"
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	"os"
 	"strings"
@@ -46,21 +48,28 @@ func Register() {
 			scanner.Scan()
 			continue
 		}
-		dataRegister.Password = password
+
+		hash := md5.Sum([]byte(password))
+		hashedPassword := hex.EncodeToString(hash[:])
+		dataRegister.Password = hashedPassword
 
 		fmt.Println("\n\nIs the data correct?")
 		fmt.Printf("First Name: %v\n", dataRegister.FirstName)
 		fmt.Printf("Last Name: %v\n", dataRegister.LastName)
-		fmt.Printf("Email: %v\n", dataRegister.Email)
+		fmt.Printf("Email: %v\n\n", dataRegister.Email)
 		fmt.Print("Continue (y/n): ")
 		inputConfirm, _ := reader.ReadString('\n')
 		confirm := strings.TrimSpace(inputConfirm)
 
 		if strings.ToLower(confirm) == "y" {
+			fmt.Printf("\x1bc")
 			user.Users = append(user.Users, dataRegister)
-			fmt.Print("Register success, enter to back.. ")
+			fmt.Print("Register success, enter to back to home.. ")
 			scanner.Scan()
 			loop = false
+		} else if strings.ToLower(confirm) != "n" {
+			fmt.Print("Invalid input, please try again.. ")
+			scanner.Scan()
 		}
 	}
 }
