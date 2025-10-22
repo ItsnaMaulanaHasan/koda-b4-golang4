@@ -3,6 +3,8 @@ package login
 import (
 	"auth-flow/user"
 	"bufio"
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	"os"
 	"strings"
@@ -26,9 +28,12 @@ func Login() {
 		inputPassword, _ := reader.ReadString('\n')
 		password := strings.TrimSpace(inputPassword)
 
+		hash := md5.Sum([]byte(password))
+		hashedPassword := hex.EncodeToString(hash[:])
+
 		for _, item := range user.Users {
 			if item.Email == email {
-				if item.Password == password {
+				if item.Password == hashedPassword {
 					validLogin = true
 					user.UserLogin = item
 				}
