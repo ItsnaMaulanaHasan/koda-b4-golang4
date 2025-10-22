@@ -48,7 +48,7 @@ func Register() {
 		}
 		dataRegister.Password = password
 
-		fmt.Println("Is the data correct?")
+		fmt.Println("\n\nIs the data correct?")
 		fmt.Printf("First Name: %v\n", dataRegister.FirstName)
 		fmt.Printf("Last Name: %v\n", dataRegister.LastName)
 		fmt.Printf("Email: %v\n", dataRegister.Email)
