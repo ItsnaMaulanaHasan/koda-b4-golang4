@@ -12,6 +12,10 @@ import (
 )
 
 func main() {
+	defer func() {
+		fmt.Println("\nExiting program")
+		os.Exit(0)
+	}()
 	loop := true
 	reader := bufio.NewReader(os.Stdin)
 	scanner := bufio.NewScanner(os.Stdin)
@@ -38,7 +42,7 @@ func main() {
 			case "0":
 				loop = false
 			default:
-				fmt.Print("error")
+				fmt.Print("Invalid menu option, press enter to continue...")
 				scanner.Scan()
 			}
 		} else {
@@ -62,7 +66,7 @@ func main() {
 			case "0":
 				loop = false
 			default:
-				fmt.Print("error")
+				fmt.Print("Invalid menu option, press enter to continue...")
 				scanner.Scan()
 			}
 		}
