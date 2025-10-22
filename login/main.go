@@ -14,40 +14,73 @@ func Login() {
 	loop := true
 	reader := bufio.NewReader(os.Stdin)
 	scanner := bufio.NewScanner(os.Stdin)
-	validLogin := false
 
 	for loop {
-		fmt.Printf("\x1bc")
-		fmt.Print("--- Login ---\n\n")
+		func() {
+			defer func() {
+				if r := recover(); r != nil {
+					fmt.Printf("\nError: %v\n", r)
+					fmt.Print("Press enter to try again...")
+					scanner.Scan()
+				}
+			}()
 
-		fmt.Print("Enter your email: ")
-		inputEmail, _ := reader.ReadString('\n')
-		email := strings.TrimSpace(inputEmail)
+			fmt.Printf("\x1bc")
+			fmt.Print("--- Login ---\n\n")
 
-		fmt.Print("Enter your password: ")
-		inputPassword, _ := reader.ReadString('\n')
-		password := strings.TrimSpace(inputPassword)
+			fmt.Print("Enter your email: ")
+			inputEmail, _ := reader.ReadString('\n')
+			email := strings.TrimSpace(inputEmail)
 
-		hash := md5.Sum([]byte(password))
-		hashedPassword := hex.EncodeToString(hash[:])
+			if email == "" {
+				panic("Email cannot be empty!")
+			}
 
-		for _, item := range user.Users {
-			if item.Email == email {
-				if item.Password == hashedPassword {
-					validLogin = true
-					user.UserLogin = item
+			if !strings.Contains(email, "@") || !strings.Contains(email, ".") {
+				panic("Invalid email format!")
+			}
+
+			fmt.Print("Enter your password: ")
+			inputPassword, _ := reader.ReadString('\n')
+			password := strings.TrimSpace(inputPassword)
+
+			if password == "" {
+				panic("Password cannot be empty!")
+			}
+
+			var hashedPassword string
+			func() {
+				defer func() {
+					password = ""
+				}()
+				hash := md5.Sum([]byte(password))
+				hashedPassword = hex.EncodeToString(hash[:])
+			}()
+
+			validLogin := false
+			var foundUser *user.User
+
+			for i := range user.Users {
+				if user.Users[i].Email == email {
+					if user.Users[i].Password == hashedPassword {
+						validLogin = true
+						foundUser = &user.Users[i]
+						break
+					}
 				}
 			}
-		}
 
-		if !validLogin {
-			fmt.Print("Invalid email or password, try again.. ")
+			if !validLogin {
+				panic("Invalid email or password!")
+			}
+
+			if foundUser != nil {
+				user.UserLogin = *foundUser
+			}
+
+			fmt.Print("Login success, enter to back to home.. ")
 			scanner.Scan()
-			continue
-		}
-
-		fmt.Print("Login success, enter to back to home.. ")
-		scanner.Scan()
-		loop = false
+			loop = false
+		}()
 	}
 }
