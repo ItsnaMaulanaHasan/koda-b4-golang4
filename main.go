@@ -31,7 +31,7 @@ func main() {
 
 			switch menu {
 			case "1":
-				fmt.Print("1")
+				user.ShowListUser()
 			case "2":
 				fmt.Print("2")
 			case "0":
