@@ -2,6 +2,7 @@ package main
 
 import (
 	"auth-flow/login"
+	"auth-flow/logout"
 	"auth-flow/register"
 	"auth-flow/user"
 	"bufio"
@@ -33,7 +34,7 @@ func main() {
 			case "1":
 				user.ShowListUser()
 			case "2":
-				fmt.Print("2")
+				logout.Logout()
 			case "0":
 				loop = false
 			default:
