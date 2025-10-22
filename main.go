@@ -1,6 +1,7 @@
 package main
 
 import (
+	"auth-flow/forgotpassword"
 	"auth-flow/login"
 	"auth-flow/logout"
 	"auth-flow/register"
@@ -62,7 +63,7 @@ func main() {
 			case "2":
 				login.Login()
 			case "3":
-				fmt.Print("3")
+				forgotpassword.ForgotPassword()
 			case "0":
 				loop = false
 			default:

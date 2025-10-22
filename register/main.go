@@ -11,10 +11,6 @@ import (
 )
 
 func Register() {
-	defer func() {
-		fmt.Println("Exiting registration process...")
-	}()
-
 	loop := true
 	reader := bufio.NewReader(os.Stdin)
 	scanner := bufio.NewScanner(os.Stdin)
