@@ -1,6 +1,7 @@
 package main
 
 import (
+	"auth-flow/register"
 	"bufio"
 	"fmt"
 	"os"
@@ -12,6 +13,7 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	scanner := bufio.NewScanner(os.Stdin)
 	for loop {
+		fmt.Printf("\x1bc")
 		fmt.Print("--- Welcome to System Authentication Flow ---\n\n")
 
 		fmt.Println("1. Register")
@@ -26,7 +28,7 @@ func main() {
 
 		switch menu {
 		case "1":
-			fmt.Print("1")
+			register.Register()
 		case "2":
 			fmt.Print("2")
 		case "3":
@@ -34,9 +36,8 @@ func main() {
 		case "0":
 			loop = false
 		default:
-			fmt.Print("12")
+			fmt.Print("error")
 			scanner.Scan()
 		}
 	}
-	
 }
