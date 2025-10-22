@@ -1,6 +1,7 @@
 package main
 
 import (
+	"auth-flow/login"
 	"auth-flow/register"
 	"bufio"
 	"fmt"
@@ -30,7 +31,7 @@ func main() {
 		case "1":
 			register.Register()
 		case "2":
-			fmt.Print("2")
+			login.Login()
 		case "3":
 			fmt.Print("3")
 		case "0":
