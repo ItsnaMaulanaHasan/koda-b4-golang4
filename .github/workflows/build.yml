@@ -2,7 +2,7 @@ name: Build Golang App
 run-name: Building Golang App for 3 Major Platform
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  Build-App-Golang:
     runs-on: windows-latest
     steps:
       - name: Check out repository code
