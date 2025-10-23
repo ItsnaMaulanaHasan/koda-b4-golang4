@@ -29,6 +29,20 @@ func (o menuLoggedIn) outputMenu() {
 	fmt.Print("\n0. exit\n\n")
 }
 
+func (o menuLoggedIn) chooseMenu(menu *string, loop *bool, scanner *bufio.Scanner) {
+	switch *menu {
+	case "1":
+		user.ShowListUser()
+	case "2":
+		logout.Logout()
+	case "0":
+		*loop = false
+	default:
+		fmt.Print("Invalid menu option, press enter to continue...")
+		scanner.Scan()
+	}
+}
+
 func (o menuNotLoggedIn) outputMenu() {
 	for i, item := range o.menu {
 		fmt.Printf("%v. %v\n", i+1, item)
@@ -36,8 +50,25 @@ func (o menuNotLoggedIn) outputMenu() {
 	fmt.Print("\n0. exit\n\n")
 }
 
+func (o menuNotLoggedIn) chooseMenu(menu *string, loop *bool, scanner *bufio.Scanner) {
+	switch *menu {
+	case "1":
+		register.Register()
+	case "2":
+		login.Login()
+	case "3":
+		forgotpassword.ForgotPassword()
+	case "0":
+		*loop = false
+	default:
+		fmt.Print("Invalid menu option, press enter to continue...")
+		scanner.Scan()
+	}
+}
+
 type outListMenu interface {
 	outputMenu()
+	chooseMenu(menu *string, loop *bool, scanner *bufio.Scanner)
 }
 
 func main() {
@@ -62,17 +93,7 @@ func main() {
 			input, _ := reader.ReadString('\n')
 			menu := strings.TrimSpace(input)
 
-			switch menu {
-			case "1":
-				user.ShowListUser()
-			case "2":
-				logout.Logout()
-			case "0":
-				loop = false
-			default:
-				fmt.Print("Invalid menu option, press enter to continue...")
-				scanner.Scan()
-			}
+			listMenu.chooseMenu(&menu, &loop, scanner)
 		} else {
 			listMenu = menuNotLoggedIn{[]string{"Register", "Login", "Forgot Password"}}
 			listMenu.outputMenu()
@@ -81,19 +102,7 @@ func main() {
 			input, _ := reader.ReadString('\n')
 			menu := strings.TrimSpace(input)
 
-			switch menu {
-			case "1":
-				register.Register()
-			case "2":
-				login.Login()
-			case "3":
-				forgotpassword.ForgotPassword()
-			case "0":
-				loop = false
-			default:
-				fmt.Print("Invalid menu option, press enter to continue...")
-				scanner.Scan()
-			}
+			listMenu.chooseMenu(&menu, &loop, scanner)
 		}
 	}
 }
