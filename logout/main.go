@@ -9,7 +9,6 @@ import (
 )
 
 func Logout() {
-	fmt.Printf("\x1bc")
 	scanner := bufio.NewScanner(os.Stdin)
 	reader := bufio.NewReader(os.Stdin)
 	loop := true
@@ -24,6 +23,7 @@ func Logout() {
 				}
 			}()
 
+			fmt.Printf("\x1bc")
 			fmt.Print("Are you sure you want to logout (y/n)? ")
 			inputConfirm, _ := reader.ReadString('\n')
 			confirm := strings.TrimSpace(inputConfirm)

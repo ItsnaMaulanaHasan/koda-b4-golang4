@@ -11,11 +11,6 @@ import (
 )
 
 func ForgotPassword() {
-	// Defer untuk cleanup
-	defer func() {
-		fmt.Println("Exiting forgot password process...")
-	}()
-
 	loop := true
 	reader := bufio.NewReader(os.Stdin)
 	scanner := bufio.NewScanner(os.Stdin)

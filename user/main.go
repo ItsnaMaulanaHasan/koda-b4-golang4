@@ -31,10 +31,11 @@ func ShowListUser() {
 		for i, item := range Users {
 			fmt.Printf("%v.\n", i+1)
 			fmt.Printf("Full Name: %v\n", item.GetFullName())
+			fmt.Printf("Email: %v\n", item.Email)
 			fmt.Printf("Password: %v\n", item.Password)
 		}
 
-		fmt.Print("\n\n Enter to back to home.. ")
+		fmt.Print("\n\nEnter to back to home.. ")
 		scanner.Scan()
 		loop = false
 	}
