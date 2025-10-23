@@ -1,7 +1,7 @@
-package logout
+package auth
 
 import (
-	"auth-flow/user"
+	"auth-flow/internal/user"
 	"bufio"
 	"fmt"
 	"os"

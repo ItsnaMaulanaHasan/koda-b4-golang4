@@ -1,11 +1,8 @@
 package main
 
 import (
-	"auth-flow/forgotpassword"
-	"auth-flow/login"
-	"auth-flow/logout"
-	"auth-flow/register"
-	"auth-flow/user"
+	"auth-flow/internal/auth"
+	"auth-flow/internal/user"
 	"bufio"
 	"fmt"
 	"os"
@@ -34,7 +31,7 @@ func (o menuLoggedIn) chooseMenu(menu *string, loop *bool, scanner *bufio.Scanne
 	case "1":
 		user.ShowListUser()
 	case "2":
-		logout.Logout()
+		auth.Logout()
 	case "0":
 		*loop = false
 	default:
@@ -53,11 +50,11 @@ func (o menuNotLoggedIn) outputMenu() {
 func (o menuNotLoggedIn) chooseMenu(menu *string, loop *bool, scanner *bufio.Scanner) {
 	switch *menu {
 	case "1":
-		register.Register()
+		auth.Register()
 	case "2":
-		login.Login()
+		auth.Login()
 	case "3":
-		forgotpassword.ForgotPassword()
+		auth.ForgotPassword()
 	case "0":
 		*loop = false
 	default:
@@ -106,3 +103,7 @@ func main() {
 		}
 	}
 }
+
+// go build -o auth-flow .
+// file auth-flow
+// GOOS=windows GOARCH=amd64 go build -o auth-flow.exe .

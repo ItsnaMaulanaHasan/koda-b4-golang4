@@ -1,7 +1,7 @@
-package login
+package auth
 
 import (
-	"auth-flow/user"
+	"auth-flow/internal/user"
 	"bufio"
 	"crypto/md5"
 	"encoding/hex"
@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func Login() {
+func ForgotPassword() {
 	loop := true
 	reader := bufio.NewReader(os.Stdin)
 	scanner := bufio.NewScanner(os.Stdin)
@@ -26,7 +26,7 @@ func Login() {
 			}()
 
 			fmt.Printf("\x1bc")
-			fmt.Print("--- Login ---\n\n")
+			fmt.Print("--- Forgot Password ---\n\n")
 
 			fmt.Print("Enter your email: ")
 			inputEmail, _ := reader.ReadString('\n')
@@ -40,7 +40,7 @@ func Login() {
 				panic("Invalid email format!")
 			}
 
-			fmt.Print("Enter your password: ")
+			fmt.Print("Enter new password: ")
 			inputPassword, _ := reader.ReadString('\n')
 			password := strings.TrimSpace(inputPassword)
 
@@ -48,37 +48,42 @@ func Login() {
 				panic("Password cannot be empty!")
 			}
 
+			fmt.Print("Confirm password: ")
+			inputConfirmPassword, _ := reader.ReadString('\n')
+			confirmPassword := strings.TrimSpace(inputConfirmPassword)
+
+			if password != confirmPassword {
+				panic("Password confirmation does not match!")
+			}
+
 			var hashedPassword string
 			func() {
 				defer func() {
 					password = ""
+					confirmPassword = ""
 				}()
 				hash := md5.Sum([]byte(password))
 				hashedPassword = hex.EncodeToString(hash[:])
 			}()
 
-			validLogin := false
+			userFound := false
 			var foundUser *user.User
 
 			for i := range user.Users {
 				if user.Users[i].Email == email {
-					if user.Users[i].Password == hashedPassword {
-						validLogin = true
-						foundUser = &user.Users[i]
-						break
-					}
+					foundUser = &user.Users[i]
+					userFound = true
+					break
 				}
 			}
 
-			if !validLogin {
-				panic("Invalid email or password!")
+			if !userFound {
+				panic("Email not registered!")
 			}
 
-			if foundUser != nil {
-				user.UserLogin = *foundUser
-			}
+			foundUser.Password = hashedPassword
 
-			fmt.Print("Login success, enter to back to home.. ")
+			fmt.Print("Password updated successfully, enter to back to home.. ")
 			scanner.Scan()
 			loop = false
 		}()

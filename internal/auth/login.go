@@ -1,7 +1,7 @@
-package forgotpassword
+package auth
 
 import (
-	"auth-flow/user"
+	"auth-flow/internal/user"
 	"bufio"
 	"crypto/md5"
 	"encoding/hex"
@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func ForgotPassword() {
+func Login() {
 	loop := true
 	reader := bufio.NewReader(os.Stdin)
 	scanner := bufio.NewScanner(os.Stdin)
@@ -26,7 +26,7 @@ func ForgotPassword() {
 			}()
 
 			fmt.Printf("\x1bc")
-			fmt.Print("--- Forgot Password ---\n\n")
+			fmt.Print("--- Login ---\n\n")
 
 			fmt.Print("Enter your email: ")
 			inputEmail, _ := reader.ReadString('\n')
@@ -40,7 +40,7 @@ func ForgotPassword() {
 				panic("Invalid email format!")
 			}
 
-			fmt.Print("Enter new password: ")
+			fmt.Print("Enter your password: ")
 			inputPassword, _ := reader.ReadString('\n')
 			password := strings.TrimSpace(inputPassword)
 
@@ -48,42 +48,37 @@ func ForgotPassword() {
 				panic("Password cannot be empty!")
 			}
 
-			fmt.Print("Confirm password: ")
-			inputConfirmPassword, _ := reader.ReadString('\n')
-			confirmPassword := strings.TrimSpace(inputConfirmPassword)
-
-			if password != confirmPassword {
-				panic("Password confirmation does not match!")
-			}
-
 			var hashedPassword string
 			func() {
 				defer func() {
 					password = ""
-					confirmPassword = ""
 				}()
 				hash := md5.Sum([]byte(password))
 				hashedPassword = hex.EncodeToString(hash[:])
 			}()
 
-			userFound := false
+			validLogin := false
 			var foundUser *user.User
 
 			for i := range user.Users {
 				if user.Users[i].Email == email {
-					foundUser = &user.Users[i]
-					userFound = true
-					break
+					if user.Users[i].Password == hashedPassword {
+						validLogin = true
+						foundUser = &user.Users[i]
+						break
+					}
 				}
 			}
 
-			if !userFound {
-				panic("Email not registered!")
+			if !validLogin {
+				panic("Invalid email or password!")
 			}
 
-			foundUser.Password = hashedPassword
+			if foundUser != nil {
+				user.UserLogin = *foundUser
+			}
 
-			fmt.Print("Password updated successfully, enter to back to home.. ")
+			fmt.Print("Login success, enter to back to home.. ")
 			scanner.Scan()
 			loop = false
 		}()

@@ -1,7 +1,7 @@
-package register
+package auth
 
 import (
-	"auth-flow/user"
+	"auth-flow/internal/user"
 	"bufio"
 	"crypto/md5"
 	"encoding/hex"
