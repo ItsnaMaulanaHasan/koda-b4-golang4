@@ -12,6 +12,34 @@ import (
 	"strings"
 )
 
+type menuLoggedIn struct {
+	emailLoggedIn string
+	menu          []string
+}
+
+type menuNotLoggedIn struct {
+	menu []string
+}
+
+func (o menuLoggedIn) outputMenu() {
+	fmt.Printf("Hello %v!\n", o.emailLoggedIn)
+	for i, item := range o.menu {
+		fmt.Printf("%v. %v\n", i+1, item)
+	}
+	fmt.Print("\n0. exit\n\n")
+}
+
+func (o menuNotLoggedIn) outputMenu() {
+	for i, item := range o.menu {
+		fmt.Printf("%v. %v\n", i+1, item)
+	}
+	fmt.Print("\n0. exit\n\n")
+}
+
+type outListMenu interface {
+	outputMenu()
+}
+
 func main() {
 	defer func() {
 		fmt.Println("\nExiting program")
@@ -20,16 +48,15 @@ func main() {
 	loop := true
 	reader := bufio.NewReader(os.Stdin)
 	scanner := bufio.NewScanner(os.Stdin)
+
+	var listMenu outListMenu
 	for loop {
 		fmt.Printf("\x1bc")
 		fmt.Print("--- Welcome to System Authentication Flow ---\n\n")
 
 		if user.UserLogin.Email != "" {
-			fmt.Printf("Hello %v!\n", user.UserLogin.Email)
-			fmt.Println("1. List All Users")
-			fmt.Println("2. Logout")
-
-			fmt.Print("\n0. exit\n\n")
+			listMenu = menuLoggedIn{user.UserLogin.Email, []string{"List All Users", "Logout"}}
+			listMenu.outputMenu()
 
 			fmt.Print("Choose a menu: ")
 			input, _ := reader.ReadString('\n')
@@ -47,11 +74,8 @@ func main() {
 				scanner.Scan()
 			}
 		} else {
-			fmt.Println("1. Register")
-			fmt.Println("2. Login")
-			fmt.Println("3. Forgot Password")
-
-			fmt.Print("\n0. exit\n\n")
+			listMenu = menuNotLoggedIn{[]string{"Register", "Login", "Forgot Password"}}
+			listMenu.outputMenu()
 
 			fmt.Print("Choose a menu: ")
 			input, _ := reader.ReadString('\n')
